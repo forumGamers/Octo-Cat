@@ -28,3 +28,12 @@ func (ik *ImagekitServiceImpl) UploadFile(ctx context.Context, upload UploadFile
 		Folder:            upload.Folder,
 	})
 }
+
+func (ik *ImagekitServiceImpl) DeleteFile(ctx context.Context, fileId string) error {
+	return ik.Client.Media.DeleteFile(ctx, fileId)
+}
+
+func (ik *ImagekitServiceImpl) DeleteBulkFile(ctx context.Context, fileIds []string) error {
+	_, err := ik.Client.Media.DeleteFiles(ctx, &imagekit.DeleteFilesRequest{FileIDs: fileIds})
+	return err
+}

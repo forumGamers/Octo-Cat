@@ -130,15 +130,24 @@ func (pc *PostControllerImpl) DeletePost(c *gin.Context) {
 	ctx := mongo.NewSessionContext(context.Background(), session)
 	var wg sync.WaitGroup
 	errCh := make(chan error)
-	wg.Add(4)
+	wg.Add(5)
 	runRountine := func(f func()) {
 		defer wg.Done()
 		f()
 	}
 
-	// go runRountine(func() {
-	// 	pc.Service.DeletePostMedia(ctx, data, errCh)
-	// })
+	go runRountine(func() {
+		var ids []string
+		for _, m := range data.Media {
+			ids = append(ids, m.Id)
+		}
+
+		if len(ids) > 0 {
+			errCh <- pc.Ik.DeleteBulkFile(ctx, ids)
+		} else {
+			errCh <- nil
+		}
+	})
 	go runRountine(func() {
 		errCh <- pc.LikeRepo.DeletePostLikes(ctx, data.Id)
 	})

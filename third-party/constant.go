@@ -8,6 +8,8 @@ import (
 
 type ImagekitService interface {
 	UploadFile(ctx context.Context, upload UploadFile) (*imagekit.UploadResponse, error)
+	DeleteFile(ctx context.Context, fileId string) error
+	DeleteBulkFile(ctx context.Context, fileIds []string) error
 }
 
 type ImagekitServiceImpl struct {

@@ -2,7 +2,7 @@ package controllers
 
 import (
 	"context"
-	"fmt"
+	"mime/multipart"
 	"sync"
 	"time"
 
@@ -35,56 +35,38 @@ func NewPostControllers(
 
 func (pc *PostControllerImpl) CreatePost(c *gin.Context) {
 	var form web.PostForm
-	pc.GetParams(c, &form)
+
+	if err := pc.GetParams(c, &form); err != nil {
+		pc.AbortHttp(c, pc.New501Error("Cannot process request body"))
+		return
+	}
 
 	if err := pc.Validator.Struct(&form); err != nil {
 		pc.HttpValidationErr(c, err)
 		return
 	}
 
-	formInput, err := c.MultipartForm()
-	if err != nil {
-		pc.AbortHttp(c, pc.New501Error("Cannot process form data"))
-		return
+	tags := []string{}
+	if len(form.Text) > 0 {
+		tags = pc.Service.GetPostTags(form.Text)
 	}
 
-	var postMedias []post.Media
-	files := formInput.File["file"]
-	if len(files) > 0 {
+	postMedias := make([]post.Media, 0)
+	if len(form.File) > 0 {
 		errCh := make(chan error)
 		var wg sync.WaitGroup
-		for _, file := range files {
+		for _, file := range form.File {
 			wg.Add(1)
-			go func(postMedias *[]post.Media) {
+			go func(postMedias *[]post.Media, file *multipart.FileHeader) {
 				defer wg.Done()
-				media, savedFile, err := h.SaveUploadedFile(c, file)
-				if err != nil {
-					errCh <- err
-					return
-				}
-
-				foldername, err := h.CheckFileType(file)
-				if err != nil {
-					errCh <- err
-					return
-				}
-
-				_, err = pc.Ik.UploadFile(context.Background(), tp.UploadFile{
-					Data:   media,
-					Name:   savedFile.Name(),
-					Folder: fmt.Sprintf("post_%s", foldername),
-				})
-				if err != nil {
-					errCh <- err
-					return
-				}
-
-				errCh <- nil
-			}(&postMedias)
+				errCh <- pc.Service.UploadPostMedia(postMedias, file, c)
+			}(&postMedias, file)
 		}
 
-		wg.Wait()
-		close(errCh)
+		go func() {
+			wg.Wait()
+			close(errCh)
+		}()
 
 		for err := range errCh {
 			if err != nil {
@@ -94,48 +76,16 @@ func (pc *PostControllerImpl) CreatePost(c *gin.Context) {
 		}
 	}
 
-	// user := h.GetUser(c)
+	userId := h.GetUser(c).UUID
+	post := pc.Service.CreatePostPayload(userId, form.Text, form.Privacy, form.AllowComment, postMedias, tags)
 
-	// if form.File != nil {
-	// 	fileInfo.Media, fileInfo.SavedFile, err := h.SaveUploadedFile(c, form.File)
-	// 	if err != nil {
-	// 		pc.New400Error(err.Error())
-	// 	}
+	pc.Repo.Create(context.Background(), &post)
 
-	// 	fileInfo.FolderName, err = h.CheckFileType(form.File)
-	// 	if err != nil {
-	// 		pc.New400Error(err.Error())
-	// 	}
-
-	// 	fileInfo.FolderName = "post_" + fileInfo.FolderName
-	// 	fileInfo.FileName = form.File.Filename
-	// }
-
-	// data, err := pc.Service.CreatePostPayload(context.Background(), &form, user, tp.UploadFile{
-	// 	Data:   fileInfo.Media,
-	// 	Folder: fileInfo.FolderName,
-	// 	Name:   fileInfo.FileName,
-	// })
-
-	// if err != nil {
-	// 	pc.AbortHttp(c, err)
-	// 	return
-	// }
-
-	// pc.Repo.Create(context.Background(), &data)
-
-	// if form.File != nil {
-	// 	fileInfo.SavedFile.Close()
-	// 	os.Remove(h.GetUploadDir(fileInfo.FileName))
-	// }
-
-	// data.Text = h.Decryption(data.Text)
-
-	// pc.WriteResponse(c, web.WebResponse{
-	// 	Code:    201,
-	// 	Message: "Success",
-	// 	Data:    data,
-	// })
+	pc.WriteResponse(c, web.WebResponse{
+		Code:    201,
+		Message: "Success",
+		Data:    post,
+	})
 }
 
 func (pc *PostControllerImpl) DeletePost(c *gin.Context) {

@@ -16,10 +16,10 @@ func (r *RequestReaderImpl) GetParams(c *gin.Context, p any) error {
 }
 
 type PostForm struct {
-	File         *multipart.FileHeader `form:"file" validate:"required_without=Text"`
-	Text         string                `form:"text" validate:"required_without=File"`
-	AllowComment bool                  `form:"allowComment"`
-	Privacy      string                `form:"privacy" validate:"oneof=Public FriendOnly Private"`
+	File         []*multipart.FileHeader `form:"files[]" binding:"required"`
+	Text         string                  `form:"text" json:"text" validate:"max=400"`
+	AllowComment bool                    `form:"allowComment" json:"allowComment"`
+	Privacy      string                  `form:"privacy" json:"privacy" validate:"oneof=Public FriendOnly Private"`
 }
 
 type CommentForm struct {

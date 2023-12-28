@@ -11,7 +11,7 @@ func (r routes) postRoutes(rg *gin.RouterGroup, mds md.Middleware, post controll
 
 	uri.Use(mds.SetContexts)
 	uri.Use(mds.Authentication)
-	uri.POST("/", post.CreatePost)
+	uri.POST("/", mds.SetMaxBody, post.CreatePost)
 	uri.POST("/bulk", post.BulkCreatePost)
 	uri.DELETE("/:postId", post.DeletePost)
 

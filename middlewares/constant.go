@@ -1,8 +1,8 @@
 package middlewares
 
 import (
-	"github.com/gin-gonic/gin"
 	"github.com/forumGamers/Octo-Cat/web"
+	"github.com/gin-gonic/gin"
 )
 
 type Middleware interface {
@@ -10,6 +10,7 @@ type Middleware interface {
 	Cors() gin.HandlerFunc
 	SetContexts(c *gin.Context)
 	CheckOrigin(c *gin.Context)
+	SetMaxBody(c *gin.Context)
 }
 
 type MiddlewareImpl struct {

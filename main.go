@@ -3,6 +3,7 @@ package main
 import (
 	"os"
 
+	cfg "github.com/forumGamers/Octo-Cat/config"
 	"github.com/forumGamers/Octo-Cat/controllers"
 	"github.com/forumGamers/Octo-Cat/errors"
 	md "github.com/forumGamers/Octo-Cat/middlewares"
@@ -21,6 +22,7 @@ import (
 
 func main() {
 	errors.PanicIfError(godotenv.Load())
+	cfg.Connection()
 
 	validate := v.GetValidator()
 	ik := tp.NewImageKit()
@@ -34,7 +36,7 @@ func main() {
 	shareRepo := share.NewShareRepo()
 	bookmarkRepo := bookmark.NewBookMarkRepo()
 
-	postService := post.NewPostService(postRepo)
+	postService := post.NewPostService(postRepo, ik)
 	likeService := like.NewLikeService(likeRepo)
 	commentService := comment.NewCommentService(commentRepo)
 	replyService := reply.NewReplyService(commentRepo)

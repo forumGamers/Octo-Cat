@@ -19,7 +19,9 @@ func NewRoutes(
 	replyController controllers.ReplyController,
 	bookmarkController controllers.BookmarkController,
 ) func(adrs ...string) error {
-	r := routes{router: gin.Default()}
+	r := routes{gin.Default()}
+	r.router.MaxMultipartMemory = 100 << 20
+	r.router.Use(gin.Recovery())
 
 	r.router.Use(mds.CheckOrigin)
 	r.router.Use(mds.Cors())

@@ -20,6 +20,8 @@ func NewError(msg string, code int) error {
 		return &badGatewayError{msg, code}
 	case 501:
 		return &notImplementedError{msg, code}
+	case 400:
+		return &badRequestError{msg, code}
 	default:
 		return &internalServerError{msg, 500}
 	}
@@ -38,6 +40,10 @@ func GetErrorMsg(err error) (string, int) {
 	case *conflictError:
 		return e.msg, e.StatusCode
 	case *notImplementedError:
+		return e.msg, e.StatusCode
+	case *badGatewayError:
+		return e.msg, e.StatusCode
+	case *badRequestError:
 		return e.msg, e.StatusCode
 	default:
 		return "Internal Server Error", 500

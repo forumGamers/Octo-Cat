@@ -31,3 +31,7 @@ func (err *badGatewayError) Error() string {
 func (err *notImplementedError) Error() string {
 	return err.msg
 }
+
+func (err *badRequestError) Error() string {
+	return err.msg
+}

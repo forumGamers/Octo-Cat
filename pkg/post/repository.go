@@ -12,7 +12,7 @@ func NewPostRepo() PostRepo {
 	return &PostRepoImpl{b.NewBaseRepo(b.GetCollection(b.Post))}
 }
 
-func (r *PostRepoImpl) Create(ctx context.Context, data Post) error {
+func (r *PostRepoImpl) Create(ctx context.Context, data *Post) error {
 	result, err := r.BaseRepo.Create(ctx, data)
 	if err != nil {
 		return err

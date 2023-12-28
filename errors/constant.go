@@ -38,7 +38,12 @@ type badGatewayError struct {
 
 type invalidObjectId struct{}
 
-type notImplementedError struct{
+type notImplementedError struct {
+	msg        string
+	StatusCode int
+}
+
+type badRequestError struct {
 	msg        string
 	StatusCode int
 }

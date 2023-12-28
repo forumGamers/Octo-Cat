@@ -20,13 +20,13 @@ func NewRoutes(
 	bookmarkController controllers.BookmarkController,
 ) func(adrs ...string) error {
 	r := routes{gin.Default()}
-	r.router.MaxMultipartMemory = 100 << 20
 	r.router.Use(gin.Recovery())
 
 	r.router.Use(mds.CheckOrigin)
 	r.router.Use(mds.Cors())
 	r.router.Use(logger.SetLogger())
 
+	r.router.MaxMultipartMemory = 100 << 20
 	groupRoutes := r.router.Group("/api/v1")
 	r.postRoutes(groupRoutes, mds, postController)
 	r.likeRoutes(groupRoutes, mds, likeController)

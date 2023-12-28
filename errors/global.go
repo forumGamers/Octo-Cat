@@ -22,6 +22,8 @@ func NewError(msg string, code int) error {
 		return &notImplementedError{msg, code}
 	case 400:
 		return &badRequestError{msg, code}
+	case 413:
+		return &entityToLarge{msg, code}
 	default:
 		return &internalServerError{msg, 500}
 	}
@@ -44,6 +46,8 @@ func GetErrorMsg(err error) (string, int) {
 	case *badGatewayError:
 		return e.msg, e.StatusCode
 	case *badRequestError:
+		return e.msg, e.StatusCode
+	case *entityToLarge:
 		return e.msg, e.StatusCode
 	default:
 		return "Internal Server Error", 500

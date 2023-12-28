@@ -16,6 +16,7 @@ type ResponseWriter interface {
 	New400Error(msg string) error
 	New409Error(msg string) error
 	New501Error(msg string) error
+	New413Error(msg string) error
 }
 
 type ResponseWriterImpl struct{}

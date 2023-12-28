@@ -35,3 +35,7 @@ func (err *notImplementedError) Error() string {
 func (err *badRequestError) Error() string {
 	return err.msg
 }
+
+func (err *entityToLarge) Error() string {
+	return err.msg
+}

@@ -47,3 +47,8 @@ type badRequestError struct {
 	msg        string
 	StatusCode int
 }
+
+type entityToLarge struct {
+	msg        string
+	StatusCode int
+}

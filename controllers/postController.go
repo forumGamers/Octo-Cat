@@ -3,6 +3,7 @@ package controllers
 import (
 	"context"
 	"mime/multipart"
+	"strings"
 	"sync"
 	"time"
 
@@ -37,7 +38,12 @@ func (pc *PostControllerImpl) CreatePost(c *gin.Context) {
 	var form web.PostForm
 
 	if err := pc.GetParams(c, &form); err != nil {
-		pc.AbortHttp(c, pc.New501Error("Cannot process request body"))
+		if strings.Contains(err.Error(), "buffer full") {
+			err = pc.New413Error("Request body to large")
+		} else {
+			err = pc.New501Error("Cannot process request")
+		}
+		pc.AbortHttp(c, err)
 		return
 	}
 

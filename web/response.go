@@ -187,6 +187,10 @@ func (w *ResponseWriterImpl) New501Error(msg string) error {
 	return errors.NewError(msg, 501)
 }
 
+func (w *ResponseWriterImpl) New413Error(msg string) error {
+	return errors.NewError(msg, 413)
+}
+
 func (w *ResponseWriterImpl) Write200Response(c *gin.Context, msg string, data any) {
 	w.WriteResponse(c, WebResponse{
 		200,

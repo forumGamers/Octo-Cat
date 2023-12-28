@@ -11,6 +11,7 @@ type Middleware interface {
 	SetContexts(c *gin.Context)
 	CheckOrigin(c *gin.Context)
 	SetMaxBody(c *gin.Context)
+	CheckFileLength(max int, fName string) gin.HandlerFunc
 }
 
 type MiddlewareImpl struct {

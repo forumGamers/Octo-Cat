@@ -6,6 +6,7 @@ import (
 	"github.com/forumGamers/Octo-Cat/pkg/like"
 	"github.com/forumGamers/Octo-Cat/pkg/post"
 	p "github.com/forumGamers/Octo-Cat/pkg/post"
+	"github.com/forumGamers/Octo-Cat/pkg/preference"
 	"github.com/forumGamers/Octo-Cat/pkg/reply"
 	"github.com/forumGamers/Octo-Cat/pkg/share"
 	tp "github.com/forumGamers/Octo-Cat/third-party"
@@ -86,5 +87,16 @@ type BookmarkControllerImpl struct {
 	Repo      bookmark.BookmarkRepo
 	Service   bookmark.BookmarkService
 	PostRepo  post.PostRepo
+	Validator *validator.Validate
+}
+
+type PreferenceController interface {
+	CreateData(c *gin.Context)
+}
+
+type PreferenceControllerImpl struct {
+	web.ResponseWriter
+	web.RequestReader
+	Repo      preference.PreferenceRepo
 	Validator *validator.Validate
 }

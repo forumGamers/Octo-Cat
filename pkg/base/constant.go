@@ -10,13 +10,14 @@ import (
 type CollectionName string
 
 const (
-	Post     CollectionName = "post"
-	Like     CollectionName = "like"
-	Comment  CollectionName = "comment"
-	Reply    CollectionName = "replyComment"
-	Share    CollectionName = "share"
-	Log      CollectionName = "log"
-	Bookmark CollectionName = "bookmark"
+	Post       CollectionName = "post"
+	Like       CollectionName = "like"
+	Comment    CollectionName = "comment"
+	Reply      CollectionName = "replyComment"
+	Share      CollectionName = "share"
+	Log        CollectionName = "log"
+	Bookmark   CollectionName = "bookmark"
+	Preference CollectionName = "preference"
 )
 
 type BaseRepo interface {

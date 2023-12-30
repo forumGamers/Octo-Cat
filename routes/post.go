@@ -6,13 +6,11 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func (r routes) postRoutes(rg *gin.RouterGroup, mds md.Middleware, post controllers.PostController) {
-	uri := rg.Group("/post")
-
-	uri.Use(mds.SetContexts)
-	uri.Use(mds.Authentication)
-	uri.POST("/", mds.CheckFileLength(4, "files[]"), mds.SetMaxBody, post.CreatePost)
-	uri.POST("/bulk", post.BulkCreatePost)
-	uri.DELETE("/:postId", post.DeletePost)
-
+func (r *routes) postRoutes(rg *gin.RouterGroup, mds md.Middleware, post controllers.PostController) {
+	rg.Group("/post").
+		Use(mds.SetContexts).
+		Use(mds.Authentication).
+		// POST("/", mds.SetMaxBody, mds.CheckFileLength(4, "files[]"), post.CreatePost).
+		POST("/bulk", post.BulkCreatePost).
+		DELETE("/:postId", post.DeletePost)
 }

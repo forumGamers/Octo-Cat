@@ -6,7 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func (r routes) replyRoutes(rg *gin.RouterGroup, mds md.Middleware, reply controllers.ReplyController) {
+func (r *routes) replyRoutes(rg *gin.RouterGroup, mds md.Middleware, reply controllers.ReplyController) {
 	uri := rg.Group("/reply")
 
 	uri.Use(mds.SetContexts)

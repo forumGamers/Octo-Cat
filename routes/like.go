@@ -6,7 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func (r routes) likeRoutes(rg *gin.RouterGroup, mds md.Middleware, like controllers.LikeController) {
+func (r *routes) likeRoutes(rg *gin.RouterGroup, mds md.Middleware, like controllers.LikeController) {
 	uri := rg.Group("/like")
 
 	uri.Use(mds.SetContexts)

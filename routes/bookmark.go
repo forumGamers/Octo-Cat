@@ -6,7 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func (r routes) bookmarkRoutes(rg *gin.RouterGroup, mds md.Middleware, bookmark controllers.BookmarkController) {
+func (r *routes) bookmarkRoutes(rg *gin.RouterGroup, mds md.Middleware, bookmark controllers.BookmarkController) {
 	uri := rg.Group("/bookmark")
 
 	uri.Use(mds.SetContexts)

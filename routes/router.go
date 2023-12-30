@@ -28,6 +28,7 @@ func NewRoutes(
 
 	r.router.MaxMultipartMemory = 100 << 20
 	groupRoutes := r.router.Group("/api/v1")
+	r.router.POST("/api/v1/post", mds.SetMaxBody, mds.CheckFileLength(4, "files[]"), postController.CreatePost)
 	r.postRoutes(groupRoutes, mds, postController)
 	r.likeRoutes(groupRoutes, mds, likeController)
 	r.commentRoutes(groupRoutes, mds, commentController)

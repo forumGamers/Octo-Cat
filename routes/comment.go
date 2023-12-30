@@ -6,7 +6,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func (r routes) commentRoutes(rg *gin.RouterGroup, mds md.Middleware, comment controllers.CommentController) {
+func (r *routes) commentRoutes(rg *gin.RouterGroup, mds md.Middleware, comment controllers.CommentController) {
 	uri := rg.Group("/comment")
 
 	uri.Use(mds.SetContexts)

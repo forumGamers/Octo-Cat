@@ -4,7 +4,7 @@ import "github.com/gin-gonic/gin"
 
 func (m *MiddlewareImpl) CheckFileLength(max int, fName string) gin.HandlerFunc {
 	return func(c *gin.Context) {
-		if err := c.Request.ParseMultipartForm(int64(max)); err != nil {
+		if err := c.Request.ParseMultipartForm(int64(100 * 1024 * 1024)); err != nil {
 			m.AbortHttp(c, m.New501Error("Failed to parse form data"))
 			return
 		}

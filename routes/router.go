@@ -18,6 +18,7 @@ func NewRoutes(
 	commentController controllers.CommentController,
 	replyController controllers.ReplyController,
 	bookmarkController controllers.BookmarkController,
+	preferenceController controllers.PreferenceController,
 ) func(adrs ...string) error {
 	r := routes{gin.Default()}
 	r.router.Use(gin.Recovery())
@@ -34,6 +35,7 @@ func NewRoutes(
 	r.commentRoutes(groupRoutes, mds, commentController)
 	r.replyRoutes(groupRoutes, mds, replyController)
 	r.bookmarkRoutes(groupRoutes, mds, bookmarkController)
+	r.preferenceRoute(groupRoutes, mds, preferenceController)
 
 	return r.router.Run
 }

@@ -11,6 +11,7 @@ import (
 	"github.com/forumGamers/Octo-Cat/pkg/comment"
 	"github.com/forumGamers/Octo-Cat/pkg/like"
 	"github.com/forumGamers/Octo-Cat/pkg/post"
+	"github.com/forumGamers/Octo-Cat/pkg/preference"
 	"github.com/forumGamers/Octo-Cat/pkg/reply"
 	"github.com/forumGamers/Octo-Cat/pkg/share"
 	"github.com/forumGamers/Octo-Cat/routes"
@@ -35,6 +36,7 @@ func main() {
 	commentRepo := comment.NewCommentRepo()
 	shareRepo := share.NewShareRepo()
 	bookmarkRepo := bookmark.NewBookMarkRepo()
+	preferenceRepo := preference.NewPreferenceRepo()
 
 	postService := post.NewPostService(postRepo, ik)
 	likeService := like.NewLikeService(likeRepo)
@@ -47,8 +49,17 @@ func main() {
 	commentController := controllers.NewCommentController(w, r, commentRepo, commentService, postRepo, validate)
 	replyController := controllers.NewReplyController(w, r, replyService, commentRepo, validate)
 	bookmarkController := controllers.NewBookmarkController(w, r, bookmarkRepo, bookmarkService, postRepo, validate)
+	preferenceController := controllers.NewPreferenceController(w, r, preferenceRepo, validate)
 
-	app := routes.NewRoutes(mds, postController, likeController, commentController, replyController, bookmarkController)
+	app := routes.NewRoutes(
+		mds,
+		postController,
+		likeController,
+		commentController,
+		replyController,
+		bookmarkController,
+		preferenceController,
+	)
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "4300"

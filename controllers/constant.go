@@ -55,10 +55,12 @@ type LikeController interface {
 type LikeControllerImpl struct {
 	web.ResponseWriter
 	web.RequestReader
-	Service   like.LikeService
-	Repo      like.LikeRepo
-	PostRepo  p.PostRepo
-	Validator *validator.Validate
+	Service           like.LikeService
+	Repo              like.LikeRepo
+	PostRepo          p.PostRepo
+	PreferenceRepo    preference.PreferenceRepo
+	PreferenceService preference.PreferenceService
+	Validator         *validator.Validate
 }
 
 type CommentController interface {
@@ -98,5 +100,6 @@ type PreferenceControllerImpl struct {
 	web.ResponseWriter
 	web.RequestReader
 	Repo      preference.PreferenceRepo
+	Service   preference.PreferenceService
 	Validator *validator.Validate
 }

@@ -31,7 +31,7 @@ func (r *LikeRepoImpl) GetLikesByUserIdAndPostId(ctx context.Context, postId pri
 	return nil
 }
 
-func (r *LikeRepoImpl) AddLikes(ctx context.Context, like Like) (primitive.ObjectID, error) {
+func (r *LikeRepoImpl) AddLikes(ctx context.Context, like *Like) (primitive.ObjectID, error) {
 	return r.Create(ctx, like)
 }
 
@@ -50,4 +50,8 @@ func (r *LikeRepoImpl) DeleteLike(ctx context.Context, postId primitive.ObjectID
 
 func (r *LikeRepoImpl) CreateMany(ctx context.Context, datas []any) (*mongo.InsertManyResult, error) {
 	return r.InsertMany(ctx, datas)
+}
+
+func (r *LikeRepoImpl) GetSession() (mongo.Session, error) {
+	return r.BaseRepo.GetSession()
 }

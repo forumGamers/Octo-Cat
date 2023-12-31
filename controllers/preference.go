@@ -16,9 +16,10 @@ func NewPreferenceController(
 	w web.ResponseWriter,
 	r web.RequestReader,
 	repo preference.PreferenceRepo,
+	service preference.PreferenceService,
 	validate *validator.Validate,
 ) PreferenceController {
-	return &PreferenceControllerImpl{w, r, repo, validate}
+	return &PreferenceControllerImpl{w, r, repo, service, validate}
 }
 
 func (pc *PreferenceControllerImpl) CreateData(c *gin.Context) {

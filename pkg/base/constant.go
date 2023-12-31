@@ -31,6 +31,7 @@ type BaseRepo interface {
 	UpdateOneByQuery(ctx context.Context, id primitive.ObjectID, query any) (*mongo.UpdateResult, error)
 	FindByQuery(ctx context.Context, query any) (*mongo.Cursor, error)
 	GetSession() (mongo.Session, error)
+	UpdateOne(ctx context.Context, filter, update any) (*mongo.UpdateResult, error)
 }
 
 type BaseRepoImpl struct {

@@ -14,7 +14,7 @@ func NewPreferenceRepo() PreferenceRepo {
 func (r *PreferenceRepoImpl) Create(ctx context.Context, userId string) (UserPreference, error) {
 	data := UserPreference{
 		UserId:    userId,
-		Tags:      []string{},
+		Tags:      []TagPreference{},
 		CreatedAt: time.Now(),
 		UpdatedAt: time.Now(),
 	}
@@ -30,4 +30,13 @@ func (r *PreferenceRepoImpl) FindByUserId(ctx context.Context, userId string) (U
 	var data UserPreference
 	err := r.FindOneByQuery(ctx, bson.M{"userId": userId}, &data)
 	return data, err
+}
+
+func (r *PreferenceRepoImpl) UpdateTags(ctx context.Context, userId string, tags []TagPreference) error {
+	_, err := r.UpdateOne(ctx, bson.M{"userId": userId}, bson.M{
+		"$set": bson.M{
+			"tags": tags,
+		},
+	})
+	return err
 }

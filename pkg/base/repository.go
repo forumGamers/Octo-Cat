@@ -85,7 +85,11 @@ func (r *BaseRepoImpl) FindOneByQuery(ctx context.Context, query any, result any
 }
 
 func (r *BaseRepoImpl) UpdateOneByQuery(ctx context.Context, id primitive.ObjectID, query any) (*mongo.UpdateResult, error) {
-	return r.DB.UpdateByID(ctx, bson.M{"_id": id}, query)
+	return r.DB.UpdateByID(ctx, id, query)
+}
+
+func (r *BaseRepoImpl) UpdateOne(ctx context.Context, filter, update any) (*mongo.UpdateResult, error) {
+	return r.DB.UpdateOne(ctx, filter, update)
 }
 
 func (r *BaseRepoImpl) FindByQuery(ctx context.Context, query any) (*mongo.Cursor, error) {

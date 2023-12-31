@@ -11,9 +11,10 @@ import (
 type LikeRepo interface {
 	DeletePostLikes(ctx context.Context, postId primitive.ObjectID) error
 	GetLikesByUserIdAndPostId(ctx context.Context, postId primitive.ObjectID, userId string, result *Like) error
-	AddLikes(ctx context.Context, like Like) (primitive.ObjectID, error)
+	AddLikes(ctx context.Context, like *Like) (primitive.ObjectID, error)
 	DeleteLike(ctx context.Context, postId primitive.ObjectID, userId string) error
 	CreateMany(ctx context.Context, datas []any) (*mongo.InsertManyResult, error)
+	GetSession() (mongo.Session, error)
 }
 
 type LikeRepoImpl struct {

@@ -43,13 +43,14 @@ func main() {
 	commentService := comment.NewCommentService(commentRepo)
 	replyService := reply.NewReplyService(commentRepo)
 	bookmarkService := bookmark.NewBookMarkService(bookmarkRepo)
+	preferenceService := preference.NewPreferenceService(preferenceRepo)
 
 	postController := controllers.NewPostControllers(w, r, postService, postRepo, commentRepo, likeRepo, shareRepo, ik, validate)
-	likeController := controllers.NewLikeController(w, r, likeService, likeRepo, postRepo, validate)
+	likeController := controllers.NewLikeController(w, r, likeService, likeRepo, postRepo, preferenceRepo, preferenceService, validate)
 	commentController := controllers.NewCommentController(w, r, commentRepo, commentService, postRepo, validate)
 	replyController := controllers.NewReplyController(w, r, replyService, commentRepo, validate)
 	bookmarkController := controllers.NewBookmarkController(w, r, bookmarkRepo, bookmarkService, postRepo, validate)
-	preferenceController := controllers.NewPreferenceController(w, r, preferenceRepo, validate)
+	preferenceController := controllers.NewPreferenceController(w, r, preferenceRepo, preferenceService, validate)
 
 	app := routes.NewRoutes(
 		mds,
